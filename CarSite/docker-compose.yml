@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  car_site_web:
+    build:
+      dockerfile: ./docker/web/Dockerfile
+    ports:
+      - "7283:7283"
+    networks:
+      - car_site_dev_network
+    image: "car_site_web"
+    container_name: "car_site_web"
+    depends_on:
+      - car_site_database
+  car_site_database:
+    build:
+      dockerfile: ./docker/db/Dockerfile
+    environment:
+      MSSQL_SA_PASSWORD: "MyPass@word"
+      MSSQL_PID: "Developer"
+      MSSQL_USER: "SA"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - car_site_dev_network
+    image: "car_site_database"
+    container_name: "car_site_database"
+
+networks:
+  car_site_dev_network:
+    name: car_site_dev_network
+    external: true
