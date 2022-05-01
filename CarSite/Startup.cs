@@ -1,12 +1,14 @@
 using CarSite.DBAL;
+using CarSite.DBAL.Repository;
+using CarSite.DBAL.Repository.Implementation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CarSite;
 
 public class Startup
 {
     private readonly IConfiguration _configuration;
+
     public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -18,7 +20,11 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddDbContext<CarsDbContext>(options =>
-            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(
+                _configuration.GetConnectionString("DefaultConnection")
+            )
+        );
+        services.AddScoped<IBrandRepository, BrandRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -29,13 +35,15 @@ public class Startup
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
         }
+        app.UseCors(x => x
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials()
+        );
         app.UseDefaultFiles();
         app.UseStaticFiles();
         app.UseRouting();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
-        
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
