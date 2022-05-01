@@ -10,4 +10,5 @@ public class CarsDbContext : DbContext
     }
     
     public DbSet<Car> Cars { get; set; }
+    public DbSet<Brand> Brands { get; set; }
 }
