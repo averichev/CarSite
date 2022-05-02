@@ -1,4 +1,5 @@
 using CarSite.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSite.DBAL.Repository.Implementation;
 
@@ -17,5 +18,10 @@ public class BrandRepository : IBrandRepository
             Name = brand.Name
         });
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<List<Entity.Brand>> List()
+    {
+        return await _context.Brands.ToListAsync();
     }
 }

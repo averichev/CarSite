@@ -25,6 +25,8 @@ public class Startup
             )
         );
         services.AddScoped<IBrandRepository, BrandRepository>();
+        services.AddScoped<IBodyRepository, BodyRepository>();
+        services.AddScoped<ICarRepository, CarRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
