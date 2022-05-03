@@ -49,4 +49,18 @@ public class CarsController : Controller
         var result = await _repository.Form();
         return result;
     }
+    
+    [HttpGet]
+    [Route("{id:int}")]
+    public async Task<CarForm> Detail(int id)
+    {
+        var car = await _repository.Detail(id);
+        return new CarForm
+        {
+            Id = car.Id,
+            Name = car.Name,
+            Url = car.Url,
+            SeatsCount = car.SeatsCount
+        };
+    }
 }

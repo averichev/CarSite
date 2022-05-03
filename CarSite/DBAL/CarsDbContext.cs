@@ -12,4 +12,12 @@ public class CarsDbContext : DbContext
     public DbSet<Car> Cars { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Body> Bodies { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Car>()
+            .HasOne(n => n.Brand)
+            .WithMany()
+            .HasForeignKey(n => n.BrandId);
+    }
 }

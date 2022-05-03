@@ -1,3 +1,4 @@
+using CarSite.DBAL.Entity;
 using CarSite.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,5 +39,10 @@ public class CarRepository : ICarRepository
             Brands = new BrandList(brands)
         };
         return result;
+    }
+
+    public async Task<Car> Detail(int id)
+    {
+        return await _context.Cars.FirstOrDefaultAsync(n => n.Id == id) ?? throw new InvalidOperationException();
     }
 }

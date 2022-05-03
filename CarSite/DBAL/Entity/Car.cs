@@ -11,6 +11,8 @@ public class Car
     public string Name { get; set; }
     public byte SeatsCount { get; set; }
     public string Url { get; set; }
+    public Brand? Brand { get; set; }
+    public Body? Body { get; set; }
     public int? BrandId { get; set; }
     public int? BodyId { get; set; }
 }
