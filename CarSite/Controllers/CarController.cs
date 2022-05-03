@@ -19,6 +19,11 @@ public class CarsController : Controller
     [Route("add")]
     public async Task<IActionResult> Add([FromBody] CarForm car)
     {
+        if (!ModelState.IsValid)
+        {
+            return UnprocessableEntityObjectResult();
+        }
+
         await _repository.AddCar(car);
         return Json(new ActionResult
         {
@@ -71,10 +76,18 @@ public class CarsController : Controller
 
     [HttpPost]
     [Route("{id:int}/edit")]
-    public async Task Edit([FromBody] CarForm car, int id)
+    public async Task<IActionResult> Edit([FromBody] CarForm car, int id)
     {
+        if (!ModelState.IsValid)
+        {
+            return UnprocessableEntityObjectResult();
+        }
         car.Id = id;
         await _repository.Edit(car);
+        return Ok(new ActionResult
+        {
+            IsSuccess = true
+        });
     }
 
     [HttpDelete]
@@ -82,5 +95,18 @@ public class CarsController : Controller
     public async Task Delete(int id)
     {
         await _repository.Delete(id);
+    }
+
+    private UnprocessableEntityObjectResult UnprocessableEntityObjectResult()
+    {
+        var errors = ModelState
+            .Values
+            .SelectMany(v => v.Errors)
+            .Select(n => n.ErrorMessage);
+        return UnprocessableEntity(new ActionResult
+        {
+            IsSuccess = false,
+            Errors = errors
+        });
     }
 }
