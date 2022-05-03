@@ -60,7 +60,17 @@ public class CarsController : Controller
             Id = car.Id,
             Name = car.Name,
             Url = car.Url,
-            SeatsCount = car.SeatsCount
+            SeatsCount = car.SeatsCount,
+            Body = car.BodyId,
+            Brand = car.BrandId
         };
+    }
+    
+    [HttpPost]
+    [Route("{id:int}/edit")]
+    public async Task Edit([FromBody] CarForm car, int id)
+    {
+        car.Id = id;
+        await _repository.Edit(car);
     }
 }

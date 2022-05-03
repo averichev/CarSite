@@ -15,7 +15,7 @@ public class CarRepository : ICarRepository
 
     public async Task AddCar(CarForm car)
     {
-        _context.Cars.Add(new Entity.Car
+        _context.Cars.Add(new Car
         {
             Name = car.Name,
             Url = car.Url,
@@ -24,7 +24,7 @@ public class CarRepository : ICarRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Entity.Car>> List()
+    public async Task<List<Car>> List()
     {
         return await _context.Cars.ToListAsync();
     }
@@ -44,5 +44,16 @@ public class CarRepository : ICarRepository
     public async Task<Car> Detail(int id)
     {
         return await _context.Cars.FirstOrDefaultAsync(n => n.Id == id) ?? throw new InvalidOperationException();
+    }
+
+    public async Task Edit(CarForm car)
+    {
+        var entity = await Detail(car.Id);
+        entity.Name = car.Name;
+        entity.Url = car.Url;
+        entity.SeatsCount = car.SeatsCount;
+        entity.BodyId = car.Body;
+        entity.BrandId = car.Brand;
+        await _context.SaveChangesAsync();
     }
 }

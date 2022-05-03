@@ -8,4 +8,5 @@ public interface ICarRepository
     Task<List<Entity.Car>> List();
     Task<CarFormData> Form();
     Task<Entity.Car> Detail(int id);
+    Task Edit(CarForm car);
 }
