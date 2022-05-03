@@ -28,7 +28,47 @@ public class CarRepository : ICarRepository
 
     public async Task<List<Car>> List()
     {
-        return await _context.Cars.ToListAsync();
+        var brands = _context.Brands;
+        var bodies = _context.Bodies;
+        var data = await _context
+            .Cars
+            .GroupJoin(
+                brands,
+                n => n.BrandId,
+                b => b.Id,
+                (c, b) => new
+                {
+                    Car = c,
+                    Brand = b
+                }
+            )
+            .SelectMany(
+                n => n.Brand.DefaultIfEmpty(),
+                (n, b) => new
+                {
+                    n.Car,
+                    Brand = b
+                })
+            .GroupJoin(
+                bodies,
+                n => n.Car.BodyId,
+                b => b.Id,
+                (c, b) => new
+                {
+                    Car = c,
+                    Body = b
+                }
+            )
+            .SelectMany(
+                n => n.Body.DefaultIfEmpty(),
+                (n, b) => new
+                {
+                    n.Car,
+                    Body = b
+                })
+            .ToListAsync();
+        var result = data.Select(n => n.Car.Car).ToList();
+        return result;
     }
 
     public async Task<CarFormData> Form()
@@ -47,7 +87,7 @@ public class CarRepository : ICarRepository
     {
         return await _context.Cars.FirstOrDefaultAsync(n => n.Id == id) ?? throw new InvalidOperationException();
     }
-    
+
     public async Task Delete(int id)
     {
         var entity = await Detail(id);

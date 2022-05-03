@@ -14,6 +14,7 @@ public class CarsController : Controller
     {
         _repository = repository;
     }
+
     [HttpPost]
     [Route("add")]
     public async Task<IActionResult> Add([FromBody] CarForm car)
@@ -24,7 +25,7 @@ public class CarsController : Controller
             IsSuccess = true
         });
     }
-    
+
     [HttpGet]
     public async Task<CarList> List()
     {
@@ -34,7 +35,9 @@ public class CarsController : Controller
             Id = n.Id,
             Name = n.Name,
             Url = n.Url,
-            SeatsCount = n.SeatsCount
+            SeatsCount = n.SeatsCount,
+            BodyName = n.Body?.Name,
+            BrandName = n.Brand?.Name,
         });
         return new CarList
         {
@@ -49,7 +52,7 @@ public class CarsController : Controller
         var result = await _repository.Form();
         return result;
     }
-    
+
     [HttpGet]
     [Route("{id:int}")]
     public async Task<CarForm> Detail(int id)
@@ -65,7 +68,7 @@ public class CarsController : Controller
             Brand = car.BrandId
         };
     }
-    
+
     [HttpPost]
     [Route("{id:int}/edit")]
     public async Task Edit([FromBody] CarForm car, int id)
@@ -73,7 +76,7 @@ public class CarsController : Controller
         car.Id = id;
         await _repository.Edit(car);
     }
-    
+
     [HttpDelete]
     [Route("{id:int}/delete")]
     public async Task Delete(int id)

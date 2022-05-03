@@ -8,4 +8,7 @@ public class CarForm
     public string Url { get; set; }
     public int? Body { get; set; }
     public int? Brand { get; set; }
+
+    public string? BrandName { get; set; }
+    public string? BodyName { get; set; }
 }
