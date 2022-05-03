@@ -73,4 +73,11 @@ public class CarsController : Controller
         car.Id = id;
         await _repository.Edit(car);
     }
+    
+    [HttpDelete]
+    [Route("{id:int}/delete")]
+    public async Task Delete(int id)
+    {
+        await _repository.Delete(id);
+    }
 }

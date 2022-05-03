@@ -19,7 +19,9 @@ public class CarRepository : ICarRepository
         {
             Name = car.Name,
             Url = car.Url,
-            SeatsCount = car.SeatsCount
+            SeatsCount = car.SeatsCount,
+            BodyId = car.Body,
+            BrandId = car.Brand
         });
         await _context.SaveChangesAsync();
     }
@@ -44,6 +46,14 @@ public class CarRepository : ICarRepository
     public async Task<Car> Detail(int id)
     {
         return await _context.Cars.FirstOrDefaultAsync(n => n.Id == id) ?? throw new InvalidOperationException();
+    }
+    
+    public async Task Delete(int id)
+    {
+        var entity = await Detail(id);
+        _context.Cars
+            .Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task Edit(CarForm car)
