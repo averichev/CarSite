@@ -15,4 +15,5 @@ public class Car
     public Body? Body { get; set; }
     public int? BrandId { get; set; }
     public int? BodyId { get; set; }
+    public DateTime RowCreated { get; }
 }
